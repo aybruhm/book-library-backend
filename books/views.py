@@ -62,3 +62,27 @@ class AuthorAPIView(views.APIView):
             data=serializer.data
         )
         return Response(data=payload, status=status.HTTP_200_OK)
+    
+
+class GetAuthorAPIView(views.APIView):
+    serializer_class = AuthorSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def get(self, reqeust:Request, id:int) -> Response:
+        
+        try:
+            author = Author.objects.get(id=id)
+        except (Author.DoesNotExist, Exception):
+            payload = error_response(
+                status=False, message="Author does not exist!"
+            )
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(author)
+        payload = success_response(
+            status=True, message="Author retrieved!",
+            data=serializer.data
+        )
+        return Response(data=payload, status=status.HTTP_200_OK)
+    
+    
