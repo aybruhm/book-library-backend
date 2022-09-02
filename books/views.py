@@ -106,3 +106,23 @@ class CreateAuthorAPIView(views.APIView):
             payload = error_response(status=False, message=serializer.errors)
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
+        
+class CreateBookAPIView(views.APIView):
+    serializer_class = BookSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def post(self, request:Request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            payload = success_response(
+                status=True, message="Book created successfully!",
+                data=serializer.data
+            )
+            return Response(data=payload, status=status.HTTP_201_CREATED)
+        
+        else:
+            payload = error_response(status=False, message=serializer.errors)
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)

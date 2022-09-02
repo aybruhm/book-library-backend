@@ -5,7 +5,7 @@ from django.urls import path
 from books.views import (
     BooksAPIView, GetBookAPIView,
     AuthorAPIView, GetAuthorAPIView,
-    CreateAuthorAPIView
+    CreateAuthorAPIView, CreateBookAPIView
 )
 
 
@@ -19,5 +19,6 @@ urlpatterns = [
     path("author/<int:id>/", GetAuthorAPIView.as_view(), name="author"),
     
     # create new resource endpoints
-    path("author/", CreateAuthorAPIView.as_view(), name="create_author")
+    path("author/", CreateAuthorAPIView.as_view(), name="create_author"),
+    path("book/", CreateBookAPIView.as_view(), name="create_book"),
 ]
