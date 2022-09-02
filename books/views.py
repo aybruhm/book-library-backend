@@ -48,6 +48,31 @@ class GetBookAPIView(views.APIView):
         )
         return Response(data=payload, status=status.HTTP_200_OK)
     
+    def put(self, request:Request, id:int) -> Response:
+        
+        try:
+            book = Book.objects.get(id=id)
+        except (Book.DoesNotExist, Exception):
+            payload = error_response(
+                status=False, message="Book does not exist!"
+            )
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(book)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            payload = success_response(
+                status=True, message="Book updated!",
+                data=serializer.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        
+        else:
+            payload = error_response(status=False, message=serializer.errors)
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
 
 class AuthorAPIView(views.APIView):
     serializer_class = AuthorSerializer
@@ -84,6 +109,32 @@ class GetAuthorAPIView(views.APIView):
             data=serializer.data
         )
         return Response(data=payload, status=status.HTTP_200_OK)
+    
+    def put(self, request:Request, id:int) -> Response:
+        
+        try:
+            author = Author.objects.get(id=id)
+        except (Author.DoesNotExist, Exception):
+            payload = error_response(
+                status=False, message="Author does not exist!"
+            )
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(author)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            payload = success_response(
+                status=True, message="Author updated!",
+                data=serializer.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        
+        else:
+            payload = error_response(status=False, message=serializer.errors)
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
     
     
 class CreateAuthorAPIView(views.APIView):
