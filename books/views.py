@@ -62,7 +62,7 @@ class GetBookAPIView(views.APIView):
             )
             return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = self.serializer_class(book)
+        serializer = self.serializer_class(instance=book, data=request.data)
         
         if serializer.is_valid():
             serializer.save()
@@ -125,7 +125,7 @@ class GetAuthorAPIView(views.APIView):
             )
             return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = self.serializer_class(author)
+        serializer = self.serializer_class(instance=author, data=request.data)
         
         if serializer.is_valid():
             serializer.save()
