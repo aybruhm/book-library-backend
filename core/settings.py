@@ -71,6 +71,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://books-library.up.railway.app",
 ]
 
+SECURE_SSL_REDIRECT = True
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": (),
