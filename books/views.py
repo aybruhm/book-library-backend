@@ -47,3 +47,18 @@ class GetBookAPIView(views.APIView):
             data=serializer.data
         )
         return Response(data=payload, status=status.HTTP_200_OK)
+    
+
+class AuthorAPIView(views.APIView):
+    serializer_class = AuthorSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def get(self, request:Request) -> Response:
+        authors = Author.objects.all()
+        serializer = self.serializer_class(authors, many=True)
+        
+        payload = success_response(
+            status=True, message="Authors retrieved!",
+            data=serializer.data
+        )
+        return Response(data=payload, status=status.HTTP_200_OK)
