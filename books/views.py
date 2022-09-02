@@ -25,4 +25,25 @@ class BooksAPIView(views.APIView):
             data=serializer.data
         )
         return Response(data=payload, status=status.HTTP_200_OK)
+
+
+class GetBookAPIView(views.APIView):
+    serializer_class = BookSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def get(self, request:Request, id:int) -> Response:
         
+        try:
+            book = Book.objects.get(id=id)
+        except (Book.DoesNotExist, Exception):
+            payload = error_response(
+                status=False, message="Book does not exist!"
+            )
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(book)
+        payload = success_response(
+            status=True, message="Book retrieved!",
+            data=serializer.data
+        )
+        return Response(data=payload, status=status.HTTP_200_OK)
