@@ -18,7 +18,10 @@ class AuthorSerializer(serializers.ModelSerializer):
         return author
     
     def update(self, instance, validated_data):
+        print("Author instance: ", instance)
+        print("Author validated_data: ", validated_data)
         return super().update(instance, validated_data)
+
 
 class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
@@ -27,3 +30,12 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ("id", "name", "isbn", "author")
     
+    def create(self, validated_data:dict):
+        book = Book.objects.create(**validated_data)
+        book.save()
+        return book
+    
+    def update(self, instance, validated_data):
+        print("Book instance: ", instance)
+        print("Book validated_data: ", validated_data)
+        return super().update(instance, validated_data)
