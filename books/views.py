@@ -86,3 +86,23 @@ class GetAuthorAPIView(views.APIView):
         return Response(data=payload, status=status.HTTP_200_OK)
     
     
+class CreateAuthorAPIView(views.APIView):
+    serializer_class = AuthorSerializer
+    permission_classes = (permissions.AllowAny, )
+    
+    def post(self, request:Request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            payload = success_response(
+                status=True, message="Author created successfully!",
+                data=serializer.data
+            )
+            return Response(data=payload, status=status.HTTP_201_CREATED)
+        
+        else:
+            payload = error_response(status=False, message=serializer.errors)
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+        
