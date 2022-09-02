@@ -5,7 +5,6 @@ from rest_framework import serializers
 from books.models import Author, Book
 
 
-
 class AuthorSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -18,24 +17,49 @@ class AuthorSerializer(serializers.ModelSerializer):
         return author
     
     def update(self, instance, validated_data):
-        print("Author instance: ", instance)
-        print("Author validated_data: ", validated_data)
         return super().update(instance, validated_data)
 
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
+    author = AuthorSerializer()
     
     class Meta:
         model = Book
         fields = ("id", "name", "isbn", "author")
     
     def create(self, validated_data:dict):
-        book = Book.objects.create(**validated_data)
+        
+        # get fields from validated data
+        _author = validated_data.get("author")
+        name = validated_data.get("name")
+        isbn = validated_data.get("isbn")
+        
+        # creates and save author object to database
+        author, _ = Author.objects.get_or_create(
+            first_name=_author.get("first_name"), 
+            last_name=_author.get("last_name")
+        )
+        author.save()
+        
+        # creates and save book object to database
+        book = Book.objects.create(name=name, isbn=isbn, author=author)
         book.save()
         return book
     
     def update(self, instance, validated_data):
-        print("Book instance: ", instance)
-        print("Book validated_data: ", validated_data)
-        return super().update(instance, validated_data)
+        # get author data
+        author_data = validated_data.pop("author")
+        
+        # get fields from validated data
+        name = validated_data.get("name")
+        isbn = validated_data.get("isbn")
+        
+        # get or create author object to database
+        author, _ = Author.objects.get_or_create(**author_data)
+        
+        # update book object to database
+        instance.author = author
+        instance.name = name
+        instance.isbn = isbn
+        instance.save()
+        return instance
