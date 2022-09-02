@@ -10,6 +10,9 @@ from books.serializers import AuthorSerializer, BookSerializer
 # Third party Imports
 from rest_api_payload import success_response, error_response
 
+# DRF Yasg Imports
+from drf_yasg.utils import swagger_auto_schema
+
 
 
 class BooksAPIView(views.APIView):
@@ -48,6 +51,7 @@ class GetBookAPIView(views.APIView):
         )
         return Response(data=payload, status=status.HTTP_200_OK)
     
+    @swagger_auto_schema(request_body=serializer_class)
     def put(self, request:Request, id:int) -> Response:
         
         try:
@@ -110,6 +114,7 @@ class GetAuthorAPIView(views.APIView):
         )
         return Response(data=payload, status=status.HTTP_200_OK)
     
+    @swagger_auto_schema(request_body=serializer_class)
     def put(self, request:Request, id:int) -> Response:
         
         try:
@@ -141,6 +146,7 @@ class CreateAuthorAPIView(views.APIView):
     serializer_class = AuthorSerializer
     permission_classes = (permissions.AllowAny, )
     
+    @swagger_auto_schema(request_body=serializer_class)
     def post(self, request:Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         
@@ -162,6 +168,7 @@ class CreateBookAPIView(views.APIView):
     serializer_class = BookSerializer
     permission_classes = (permissions.AllowAny, )
     
+    @swagger_auto_schema(request_body=serializer_class)
     def post(self, request:Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         
