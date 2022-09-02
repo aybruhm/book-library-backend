@@ -20,6 +20,13 @@ class BooksAPIView(views.APIView):
     permission_classes = (permissions.AllowAny, )
     
     def get(self, request:Request) -> Response:
+        """
+        This view fetches all the books in the db
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :return: A Response object.
+        """
         books = Book.objects.all()
         serializer = self.serializer_class(books, many=True)
         
@@ -35,6 +42,15 @@ class GetUpdateBookAPIView(views.APIView):
     permission_classes = (permissions.AllowAny, )
     
     def get(self, request:Request, id:int) -> Response:
+        """
+        This view fetch a book with a given id
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :param id: The id of the book to be fetched
+        :type id: int
+        :return: A Response object.
+        """
         
         try:
             book = Book.objects.get(id=id)
@@ -53,6 +69,15 @@ class GetUpdateBookAPIView(views.APIView):
     
     @swagger_auto_schema(request_body=serializer_class)
     def put(self, request:Request, id:int) -> Response:
+        """
+        This view update a book with a given id
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :param id: The id of the book to be updated
+        :type id: int
+        :return: A Response object.
+        """
         
         try:
             book = Book.objects.get(id=id)
@@ -83,6 +108,13 @@ class AuthorAPIView(views.APIView):
     permission_classes = (permissions.AllowAny, )
     
     def get(self, request:Request) -> Response:
+        """
+        This view fetches all the authors in the db
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :return: A Response object.
+        """
         authors = Author.objects.all()
         serializer = self.serializer_class(authors, many=True)
         
@@ -98,6 +130,15 @@ class GetUpdateAuthorAPIView(views.APIView):
     permission_classes = (permissions.AllowAny, )
     
     def get(self, reqeust:Request, id:int) -> Response:
+        """
+        This view gets an author with a given id
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :param id: The id of the author to be fetched
+        :type id: int
+        :return: A Response object.
+        """
         
         try:
             author = Author.objects.get(id=id)
@@ -116,6 +157,15 @@ class GetUpdateAuthorAPIView(views.APIView):
     
     @swagger_auto_schema(request_body=serializer_class)
     def put(self, request:Request, id:int) -> Response:
+        """
+        This view update an author with a given id
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :param id: The id of the author to be updated
+        :type id: int
+        :return: A Response object.
+        """
         
         try:
             author = Author.objects.get(id=id)
@@ -148,6 +198,13 @@ class CreateAuthorAPIView(views.APIView):
     
     @swagger_auto_schema(request_body=serializer_class)
     def post(self, request:Request) -> Response:
+        """
+        This view creates a new author
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :return: A Response object.
+        """
         serializer = self.serializer_class(data=request.data)
         
         if serializer.is_valid():
@@ -170,6 +227,13 @@ class CreateBookAPIView(views.APIView):
     
     @swagger_auto_schema(request_body=serializer_class)
     def post(self, request:Request) -> Response:
+        """
+        This view creates a new book
+        
+        :param request: This is the request object that is sent to the view
+        :type request: Request
+        :return: A response object.
+        """
         serializer = self.serializer_class(data=request.data)
         
         if serializer.is_valid():
