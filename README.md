@@ -22,13 +22,13 @@ To get it running on your local machine, follow the steps below:
 1. Run the commands below in your terminal:
 
 ```
-git clone git@github.com:israelabraham/book-library.git
+git clone git@github.com:israelabraham/book-library-backend.git
 ```
 
-2. Change directory to book-library:
+2. Change directory to book-library-backend:
 
 ```
-cd book-library
+cd book-library-backend
 ```
 
 3. Install the requirements with the command below:
