@@ -30,7 +30,7 @@ class BooksAPIView(views.APIView):
         return Response(data=payload, status=status.HTTP_200_OK)
 
 
-class GetBookAPIView(views.APIView):
+class GetUpdateBookAPIView(views.APIView):
     serializer_class = BookSerializer
     permission_classes = (permissions.AllowAny, )
     
@@ -93,7 +93,7 @@ class AuthorAPIView(views.APIView):
         return Response(data=payload, status=status.HTTP_200_OK)
     
 
-class GetAuthorAPIView(views.APIView):
+class GetUpdateAuthorAPIView(views.APIView):
     serializer_class = AuthorSerializer
     permission_classes = (permissions.AllowAny, )
     
