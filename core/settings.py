@@ -68,6 +68,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://lib-books.netlify.app",
     "https://books-library.up.railway.app",
 ]
 
