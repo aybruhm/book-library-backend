@@ -34,12 +34,17 @@ class BookSerializer(serializers.ModelSerializer):
         name = validated_data.get("name")
         isbn = validated_data.get("isbn")
         
-        # creates and save author object to database
-        author, _ = Author.objects.get_or_create(
-            first_name=_author.get("first_name"), 
-            last_name=_author.get("last_name")
-        )
-        author.save()
+        # gets or creates and save author object to database
+        try:
+            author = Author.objects.get(
+                first_name=_author.get("first_name"), 
+                last_name=_author.get("last_name")
+            )
+        except (Author.DoesNotExist, Exception):
+            author = Author.objects.create(
+                first_name=str(_author.get("first_name")).capitalize, 
+                last_name=str(_author.get("last_name")).capitalize
+            ).save()
         
         # creates and save book object to database
         book = Book.objects.create(name=name, isbn=isbn, author=author)
