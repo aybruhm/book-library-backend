@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["books-library.up.railway.app"]
+ALLOWED_HOSTS = ["books-library.up.railway.app", "127.0.0.1"]
 
 
 # Application definition
@@ -70,8 +70,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://books-library.up.railway.app",
 ]
-
-SECURE_SSL_REDIRECT = True
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
