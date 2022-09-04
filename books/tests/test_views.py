@@ -13,7 +13,7 @@ from rest_framework.test import APIClient, APITestCase
 
 # Own Imports
 from books.models import Author, Book
-from books.serializers import BookSerializer
+from books.serializers import AuthorSerializer, BookSerializer
 
 
 # Initialize api client
@@ -31,7 +31,7 @@ class BooksTestCase(APITestCase):
     def test_get_all_books(self):
         """
         Test that the response data from the API is equal 
-        to the serialized data of all thebooks in the database
+        to the serialized data of all the books in the database
         
         :return: A response object data and status_code 200
         """
@@ -179,24 +179,141 @@ class UpdateSingleBookTestCase(APITestCase):
     
 
 class AuthorsTestCase(APITestCase):
+    """Test case to get all the authors api"""
     
     def setUp(self) -> None:
-        return super().setUp()
+        Author.objects.create(first_name="Jane", last_name="Doe")
+        Author.objects.create(first_name="Flutter", last_name="Wave")
+        Author.objects.create(first_name="Waje", last_name="Solutions")
     
     def test_get_all_authors(self):
-        pass
+        """
+        Test that the response data from the API is equal
+        to the serialized data of all the authors in the database
+        
+        :return: A response object data and status_code 200
+        """
+        response = client.get(reverse("authors"))
+    
+        authors = Author.objects.all()
+        
+        serializer = AuthorSerializer(authors, many=True)
+        serializer_data = success_response(status=True, message="Authors retrieved!", data=serializer.data)
+        
+        self.assertEqual(response.data, serializer_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
     
 
 class AuthorTestCase(APITestCase):
+    """Test case to create and get a single author api"""
     
     def setUp(self) -> None:
-        return super().setUp()
+        self.author = Author.objects.create(first_name="John", last_name="Doe")
+        self.valid_payload = {
+            "first_name": "Clever",
+            "last_name": "Programmer"
+        }
+        self.invalid_payload = {
+            "first_name": "",
+            "last_name": 37384947584
+        }
     
     def test_get_single_author(self):
-        pass
+        """
+        Test that the response data from the API is equal 
+        to the serialized data of the author object
+        
+        :return: A response object data and status_code 200
+        """
+        response = client.get(reverse('author', args=[self.author.id]))        
+        author = Author.objects.get(id=self.author.id)
+        
+        serializer = AuthorSerializer(author)
+        serializer_data = success_response(status=True, message="Author retrieved!", data=serializer.data)
+        
+        self.assertEqual(response.data, serializer_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
     
-    def test_update_single_author(self):
-        pass
+    def test_create_valid_author(self):
+        """
+        Test case to send a POST request to the create_author 
+        endpoint with a valid payload
+        
+        :return: A response status_code 201
+        """
+        response = client.post(
+            reverse('create_author'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
-    def test_create_author(self):
-        pass
+    def test_create_invalid_author(self):
+        """
+        Test case to send a POST request to the create_author 
+        endpoint with an invalid payload
+        
+        :return: A response status_code 400
+        """
+        response = client.post(
+            reverse('create_author'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+  
+
+class UpdateSingleAuthorTestCase(APITestCase):
+    """Test case to update a single author api"""
+    
+    def setUp(self) -> None:
+        self.author = Author.objects.create(first_name="John", last_name="Doe")
+        self.valid_payload = {
+            "first_name": "Qazi",
+            "last_name": self.author.last_name
+        }
+        self.invalid_payload = {
+            "first_name": "",
+            "last_name": 37384947584
+        }
+    
+    def test_valid_update_single_author(self):
+        """
+        Test case to send a PUT request to the author endpoint with the author id, 
+        and the valid payload
+        
+        :return: A response status_code 200
+        """
+        response = client.put(
+            reverse('author', args=[self.author.id]),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_invalid_update_single_author(self):
+        """
+        Test case to update an author with invalid data
+        
+        :return: A response status_code 400
+        """
+        response = client.put(
+            reverse('author', args=[self.author.id]),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_update_single_author_not_found(self):
+        """
+        Test case to update an author that doesn't exist
+        
+        :return: A response status_code 404
+        """
+        response = client.put(
+            reverse('author', args=[53]),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
