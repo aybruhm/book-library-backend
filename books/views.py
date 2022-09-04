@@ -100,7 +100,7 @@ class GetUpdateBookAPIView(views.APIView):
         
         else:
             payload = error_response(status=False, message=serializer.errors)
-            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 
 class AuthorAPIView(views.APIView):
@@ -188,7 +188,7 @@ class GetUpdateAuthorAPIView(views.APIView):
         
         else:
             payload = error_response(status=False, message=serializer.errors)
-            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
     
     
