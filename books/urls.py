@@ -4,7 +4,7 @@ from django.urls import path
 # API View Imports
 from books.views import (
     BooksAPIView, GetUpdateBookAPIView,
-    AuthorAPIView, GetUpdateAuthorAPIView,
+    AuthorsAPIView, GetUpdateAuthorAPIView,
     CreateAuthorAPIView, CreateBookAPIView
 )
 
@@ -12,7 +12,7 @@ from books.views import (
 urlpatterns = [
     # fetch endpoints
     path("books/", BooksAPIView.as_view(), name="books"),
-    path("authors/", AuthorAPIView.as_view(), name="authors"),
+    path("authors/", AuthorsAPIView.as_view(), name="authors"),
     
     # get detail and update endpoints
     path("book/<int:id>/", GetUpdateBookAPIView.as_view(), name="book"),

@@ -103,7 +103,7 @@ class GetUpdateBookAPIView(views.APIView):
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 
-class AuthorAPIView(views.APIView):
+class AuthorsAPIView(views.APIView):
     serializer_class = AuthorSerializer
     permission_classes = (permissions.AllowAny, )
     
