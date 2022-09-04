@@ -3,7 +3,7 @@ certifi==2022.6.15
 charset-normalizer==2.1.1
 coreapi==2.3.3
 coreschema==0.0.4
-Django==4.1
+Django==3.2.15
 django-cors-headers==3.13.0
 djangorestframework==3.13.1
 drf-yasg==1.21.3
